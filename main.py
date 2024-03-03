@@ -7,21 +7,21 @@ import random
 def union_frequency(arr):
     k = 0
     for i in range(len(arr)-1, -1, -1):
-        if arr[i][1] and i == 0 <= 5:
+        if arr[i][1] <= 5 and i == 0:
             k = 0
             arr[1][1] = arr[i][1] + arr[i + 1][1]
             arr[1][2] = arr[i][2] + arr[i + 1][2]
             arr[1][3] = arr[i][3] + arr[i + 1][3]
-            arr[1][4] = arr[i][3] ** 2
-            arr[1][5] = arr[i][4] / arr[i][2]
+            arr[1][4] = arr[1][3] ** 2
+            arr[1][5] = arr[1][4] / arr[1][2]
             return arr[1:]
         elif arr[i][1] <= 5:
             k = i
-            arr[i-1][1] = arr[i][1] + arr[i-1][1]
-            arr[i-1][2] = arr[i][2] + arr[i-1][2]
-            arr[i-1][3] = arr[i][3] + arr[i-1][3]
-            arr[i-1][4] = arr[i][3] ** 2
-            arr[i-1][5] = arr[i][4] / arr[i][2]
+            arr[i-1][1] = arr[i-1][1] + arr[i][1]
+            arr[i-1][2] = arr[i-1][2] + arr[i-1][2]
+            arr[i-1][3] = arr[i-1][3] + arr[i][3]
+            arr[i-1][4] = arr[i-1][3] ** 2
+            arr[i-1][5] = arr[i-1][4] / arr[i-1][2]
             return arr[:k] + arr[k + 1:]
 
 
@@ -32,10 +32,9 @@ numb_of_experiments = 300  # Число экспериментов
 
 
 # Вероятности Пуассона
-print("Вероятности Пуассона:")
-poisson_probability = [np.exp(-poisson_lambda) * (poisson_lambda ** i) / np.math.factorial(i) for i in
-                       range(events_number)]
-print(poisson_probability)
+#poisson_probability = [np.exp(-poisson_lambda) * (poisson_lambda ** i) / np.math.factorial(i) for i in
+#                       range(events_number)]
+#print("Вероятности Пуассона:\n", poisson_probability)
 
 # Генерируем собственное распределение
 array = [0 for _ in range(events_number)]
@@ -54,8 +53,12 @@ for _ in range(numb_of_experiments):
 
 print("Сгенерированные случайные числа:\n", array)
 
+estimation_lambda = sum([i * array[i] for i in range(len(array))]) / numb_of_experiments
+print("Оценка параметра лямбда: ", estimation_lambda)
+
+
 # Вычисляем теоретические частоты
-theor_frequency = [numb_of_experiments * np.exp(-poisson_lambda) * (poisson_lambda ** i)
+theor_frequency = [numb_of_experiments * np.exp(-estimation_lambda) * (estimation_lambda ** i)
                    / np.math.factorial(i) for i in range(events_number)]
 print("Теоретические частоты:\n", theor_frequency)
 
